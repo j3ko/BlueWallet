@@ -1049,33 +1049,57 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
     return false;
   }
 
+  calculateHowManySignaturesWeHaveFromPsbt(psbt) {
+    let sigsHave = 0;
+    for (const inp of psbt.data.inputs) {
+      if (inp.finalScriptSig || inp.finalScriptWitness || inp.partialSig) sigsHave++;
+    }
+    return sigsHave;
+  }
+
   /**
-   * sign psbt and prepare it for export.
+   * Tries to signs passed psbt object (by reference). If there are enough signatures - tries to finalize psbt
+   * and returns Transaction (ready to extract hex)
    *
-   * @param address
-   * @base64 {String} base64 encoded psbt
+   * @param psbt {Psbt}
+   * @returns {{ tx: Transaction }}
    */
   cosignPsbt(psbt) {
-    psbt.data.inputs.forEach((input, c) => {
-      const path = input.bip32Derivation[0].path;
-      if (!path.startsWith(this.rootDerivationPath)) {
-        throw new Error(`${path} derivation path is not supported for this wallet`);
+    const mnemonic = this.secret;
+    const seed = bip39.mnemonicToSeed(mnemonic);
+    const hdRoot = HDNode.fromSeed(seed);
+
+    for (let cc = 0; cc < psbt.inputCount; cc++) {
+      // TODO make this work
+      // try {
+      //   psbt.signInputHD(cc, hdRoot);
+      // } catch (e) {
+      //   // protects agains duplicate cosignings
+      //   if (e.message !== 'Can not add duplicate data to array') throw e;
+      // }
+
+      if (!psbt.inputHasHDKey(cc, hdRoot)) {
+        for (const derivation of psbt.data.inputs[cc].bip32Derivation || []) {
+          const splt = derivation.path.split('/');
+          const internal = +splt[splt.length - 2];
+          const index = +splt[splt.length - 1];
+          const wif = this._getWIFByIndex(internal, index);
+          const keyPair = bitcoin.ECPair.fromWIF(wif);
+          try {
+            psbt.signInput(cc, keyPair);
+          } catch (e) {
+            // protects agains duplicate cosignings
+            if (e.message !== 'Can not add duplicate data to array') throw e;
+          }
+        }
       }
+    }
 
-      const splt = path.split('/');
-      const internal = +splt[splt.length - 2];
-      const index = +splt[splt.length - 1];
-      const wif = this._getWIFByIndex(internal, index);
-      const keyPair = bitcoin.ECPair.fromWIF(wif);
-      psbt.signInput(c, keyPair);
-    });
+    let tx = false;
+    if (this.calculateHowManySignaturesWeHaveFromPsbt(psbt) === psbt.inputCount) {
+      tx = psbt.finalizeAllInputs().extractTransaction();
+    }
 
-    // const tx = psbt.finalizeAllInputs().extractTransaction();
-    const hex = psbt.finalizeAllInputs().toHex()
-
-    // console.info('tx', tx)
-    console.info('hex', hex)
-
-    return { psbt }
+    return { tx };
   }
 }
