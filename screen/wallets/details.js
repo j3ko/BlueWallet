@@ -340,6 +340,10 @@ const WalletDetails = () => {
     navigate('IsItMyAddress');
   };
 
+  const navigateToPsbtSign = () => {
+    navigate('PsbtSign', { walletID: wallet.getID() });
+  };
+
   const walletNameTextInputOnBlur = () => {
     if (walletName.trim().length === 0) {
       const walletLabel = wallet.getLabel();
@@ -524,6 +528,12 @@ const WalletDetails = () => {
                 <>
                   <BlueSpacing20 />
                   <SecondButton onPress={navigateToBroadcast} title={loc.settings.network_broadcast} />
+                </>
+              )}
+              {wallet.isHd() && wallet.type !== WatchOnlyWallet.type && (
+                <>
+                  <BlueSpacing20 />
+                  <SecondButton onPress={navigateToPsbtSign} title={loc.send.psbt_sign} />
                 </>
               )}
               <>

@@ -1048,4 +1048,34 @@ export class AbstractHDElectrumWallet extends AbstractHDWallet {
     }
     return false;
   }
+
+  /**
+   * sign psbt and prepare it for export.
+   *
+   * @param address
+   * @base64 {String} base64 encoded psbt
+   */
+  cosignPsbt(psbt) {
+    psbt.data.inputs.forEach((input, c) => {
+      const path = input.bip32Derivation[0].path;
+      if (!path.startsWith(this.rootDerivationPath)) {
+        throw new Error(`${path} derivation path is not supported for this wallet`);
+      }
+
+      const splt = path.split('/');
+      const internal = +splt[splt.length - 2];
+      const index = +splt[splt.length - 1];
+      const wif = this._getWIFByIndex(internal, index);
+      const keyPair = bitcoin.ECPair.fromWIF(wif);
+      psbt.signInput(c, keyPair);
+    });
+
+    // const tx = psbt.finalizeAllInputs().extractTransaction();
+    const hex = psbt.finalizeAllInputs().toHex()
+
+    // console.info('tx', tx)
+    console.info('hex', hex)
+
+    return { psbt }
+  }
 }
