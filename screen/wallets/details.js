@@ -1,20 +1,20 @@
 /* global alert */
 import React, { useEffect, useState, useCallback, useContext, useRef } from 'react';
 import {
-  View,
+  Alert,
+  Keyboard,
+  KeyboardAvoidingView,
+  Linking,
+  PermissionsAndroid,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Switch,
   Text,
   TextInput,
-  Alert,
-  KeyboardAvoidingView,
   TouchableOpacity,
-  Keyboard,
   TouchableWithoutFeedback,
-  Switch,
-  Platform,
-  Linking,
-  StyleSheet,
-  StatusBar,
-  PermissionsAndroid,
+  View,
 } from 'react-native';
 import { SecondButton, SafeBlueArea, BlueCard, BlueSpacing20, BlueText, BlueLoading } from '../../BlueComponents';
 import navigationStyle from '../../components/navigationStyle';
@@ -24,7 +24,16 @@ import { HDLegacyP2PKHWallet } from '../../class/wallets/hd-legacy-p2pkh-wallet'
 import { HDSegwitP2SHWallet } from '../../class/wallets/hd-segwit-p2sh-wallet';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import Biometric from '../../class/biometrics';
-import { HDSegwitBech32Wallet, SegwitP2SHWallet, LegacyWallet, SegwitBech32Wallet, WatchOnlyWallet, MultisigHDWallet } from '../../class';
+import {
+  HDLegacyElectrumSeedP2PKHWallet,
+  HDSegwitBech32Wallet,
+  HDSegwitElectrumSeedP2WPKHWallet,
+  LegacyWallet,
+  MultisigHDWallet,
+  SegwitBech32Wallet,
+  SegwitP2SHWallet,
+  WatchOnlyWallet,
+} from '../../class';
 import { ScrollView } from 'react-native-gesture-handler';
 import loc from '../../loc';
 import { useTheme, useRoute, useNavigation } from '@react-navigation/native';
@@ -530,7 +539,14 @@ const WalletDetails = () => {
                   <SecondButton onPress={navigateToBroadcast} title={loc.settings.network_broadcast} />
                 </>
               )}
-              {wallet.isHd() && wallet.type !== WatchOnlyWallet.type && (
+              {[
+                HDLegacyBreadwalletWallet.type,
+                HDLegacyElectrumSeedP2PKHWallet.type,
+                HDLegacyP2PKHWallet.type,
+                HDSegwitBech32Wallet.type,
+                HDSegwitElectrumSeedP2WPKHWallet.type,
+                HDSegwitP2SHWallet.type,
+              ].includes(wallet.type) && (
                 <>
                   <BlueSpacing20 />
                   <SecondButton onPress={navigateToPsbtSign} title={loc.send.psbt_sign} />
