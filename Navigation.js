@@ -164,7 +164,7 @@ const WalletsRoot = () => {
         options={LNDViewAdditionalInvoicePreImage.navigationOptions(theme)}
       />
       <WalletsStack.Screen name="Broadcast" component={Broadcast} options={Broadcast.navigationOptions(theme)} />
-      <WalletsStack.Screen name="PsbtSign" component={PsbtSign} />
+      <WalletsStack.Screen name="PsbtSign" component={PsbtSign} options={PsbtSign.navigationOptions(theme)}  />
       <WalletsStack.Screen name="IsItMyAddress" component={IsItMyAddress} options={IsItMyAddress.navigationOptions(theme)} />
       <WalletsStack.Screen name="LnurlPay" component={LnurlPay} options={LnurlPay.navigationOptions(theme)} />
       <WalletsStack.Screen name="LnurlPaySuccess" component={LnurlPaySuccess} options={LnurlPaySuccess.navigationOptions(theme)} />

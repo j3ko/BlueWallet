@@ -9,8 +9,6 @@ export class HDSegwitBech32Wallet extends AbstractHDElectrumWallet {
   static type = 'HDsegwitBech32';
   static typeReadable = 'HD SegWit (BIP84 Bech32 Native)';
 
-  rootDerivationPath = "m/84'/0'/0'/"; // required for wallet.signPsbt()
-
   allowSend() {
     return true;
   }

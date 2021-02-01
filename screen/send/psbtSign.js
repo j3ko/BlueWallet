@@ -337,6 +337,7 @@ const styles = StyleSheet.create({
   },
   hexLabel: {
     fontWeight: '500',
+    paddingBottom: 10,
   },
   hexInput: {
     borderRadius: 4,
