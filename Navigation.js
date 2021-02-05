@@ -164,7 +164,6 @@ const WalletsRoot = () => {
         options={LNDViewAdditionalInvoicePreImage.navigationOptions(theme)}
       />
       <WalletsStack.Screen name="Broadcast" component={Broadcast} options={Broadcast.navigationOptions(theme)} />
-      <WalletsStack.Screen name="PsbtSign" component={PsbtSign} options={PsbtSign.navigationOptions(theme)}  />
       <WalletsStack.Screen name="IsItMyAddress" component={IsItMyAddress} options={IsItMyAddress.navigationOptions(theme)} />
       <WalletsStack.Screen name="LnurlPay" component={LnurlPay} options={LnurlPay.navigationOptions(theme)} />
       <WalletsStack.Screen name="LnurlPaySuccess" component={LnurlPaySuccess} options={LnurlPaySuccess.navigationOptions(theme)} />
@@ -245,6 +244,7 @@ const SendDetailsRoot = () => {
       />
       <SendDetailsStack.Screen name="SelectWallet" component={SelectWallet} options={SelectWallet.navigationOptions(theme)} />
       <SendDetailsStack.Screen name="CoinControl" component={CoinControl} options={CoinControl.navigationOptions(theme)} />
+      <SendDetailsStack.Screen name="PsbtSign" component={PsbtSign} options={PsbtSign.navigationOptions(theme)} />
     </SendDetailsStack.Navigator>
   );
 };

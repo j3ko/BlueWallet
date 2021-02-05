@@ -210,7 +210,7 @@
     "input_total": "Total:",
     "permission_camera_message": "We need your permission to use your camera.",
     "permission_camera_title": "Permission to use camera",
-    "psbt_sign": "Sign PSBT",
+    "psbt_sign": "Sign a transaction",
     "open_settings": "Open Settings",
     "permission_storage_later": "Ask me later",
     "permission_storage_message": "BlueWallet needs your permission to access your storage to save this file.",

@@ -24,16 +24,7 @@ import { HDLegacyP2PKHWallet } from '../../class/wallets/hd-legacy-p2pkh-wallet'
 import { HDSegwitP2SHWallet } from '../../class/wallets/hd-segwit-p2sh-wallet';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import Biometric from '../../class/biometrics';
-import {
-  HDLegacyElectrumSeedP2PKHWallet,
-  HDSegwitBech32Wallet,
-  HDSegwitElectrumSeedP2WPKHWallet,
-  LegacyWallet,
-  MultisigHDWallet,
-  SegwitBech32Wallet,
-  SegwitP2SHWallet,
-  WatchOnlyWallet,
-} from '../../class';
+import { HDSegwitBech32Wallet, LegacyWallet, MultisigHDWallet, SegwitBech32Wallet, SegwitP2SHWallet, WatchOnlyWallet } from '../../class';
 import { ScrollView } from 'react-native-gesture-handler';
 import loc from '../../loc';
 import { useTheme, useRoute, useNavigation } from '@react-navigation/native';
@@ -349,10 +340,6 @@ const WalletDetails = () => {
     navigate('IsItMyAddress');
   };
 
-  const navigateToPsbtSign = () => {
-    navigate('PsbtSign', { walletID: wallet.getID() });
-  };
-
   const walletNameTextInputOnBlur = () => {
     if (walletName.trim().length === 0) {
       const walletLabel = wallet.getLabel();
@@ -537,19 +524,6 @@ const WalletDetails = () => {
                 <>
                   <BlueSpacing20 />
                   <SecondButton onPress={navigateToBroadcast} title={loc.settings.network_broadcast} />
-                </>
-              )}
-              {[
-                HDLegacyBreadwalletWallet.type,
-                HDLegacyElectrumSeedP2PKHWallet.type,
-                HDLegacyP2PKHWallet.type,
-                HDSegwitBech32Wallet.type,
-                HDSegwitElectrumSeedP2WPKHWallet.type,
-                HDSegwitP2SHWallet.type,
-              ].includes(wallet.type) && (
-                <>
-                  <BlueSpacing20 />
-                  <SecondButton onPress={navigateToPsbtSign} title={loc.send.psbt_sign} />
                 </>
               )}
               <>
